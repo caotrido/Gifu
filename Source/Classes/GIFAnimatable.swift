@@ -189,8 +189,14 @@ extension GIFAnimatable {
   /// Updates the image with a new frame if necessary.
   public func updateImageIfNeeded() {
     if var imageContainer = self as? ImageContainer {
-      let container = imageContainer
-      imageContainer.image = activeFrame ?? container.image
+      if let container = imageContainer as? UIImageView {
+          UIView.transition(with: container, duration: 0.7, options: .transitionCrossDissolve, animations: {
+              imageContainer.image = self.activeFrame ?? imageContainer.image
+          }, completion: nil)
+      }
+      else {
+          imageContainer.image = activeFrame ?? imageContainer.image
+      }
     } else {
       layer.contents = activeFrame?.cgImage
     }
